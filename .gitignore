@@ -1,0 +1,5 @@
+Datasets/
+.vscode/
+__pycache__/
+face-clustering/dataset/
+Ressources/
