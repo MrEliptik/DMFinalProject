@@ -90,7 +90,7 @@ if __name__ == "__main__":
     print(">> Vectorizing documents")
     vectorized = vectorizeDocs(docs)
     
-    optics.template_clustering(vectorized, 5, 10)
+    optics.cluster(vectorized, 5, 0.5)
 
     print()
         

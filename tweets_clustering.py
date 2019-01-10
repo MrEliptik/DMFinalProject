@@ -69,7 +69,7 @@ if __name__ == "__main__":
     
     print(">> Running OPTICS..")
     start = time.time()
-    optics.template_clustering(data[453180:], 150, 50)
+    optics.cluster(data, 5, 0.5)
     print(">> " + str(time.time() - start) + "s execution time.")
      
 
