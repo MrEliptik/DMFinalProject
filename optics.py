@@ -1,46 +1,48 @@
-from pyclustering.cluster.optics import optics, ordering_analyser, ordering_visualizer
-from pyclustering.cluster import cluster_visualizer_multidim
-from pyclustering.utils import read_sample, timedcall
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
-
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+from sklearn.cluster import OPTICS
 
-def template_clustering(sample, eps, minpts, amount_clusters=None, visualize=True, ccore=False):
-    optics_instance = optics(sample, eps, minpts, amount_clusters, ccore)
-    optics_instance.process()
+def cluster(data, min_samples=5, eps=0.5 ,reachability_plot=True, clustering_visualization=False):
+        clust = OPTICS(min_samples=min_samples, rejection_ratio=eps)
 
-    if (visualize is True):
-        clusters = optics_instance.get_clusters()
-        noise = optics_instance.get_noise()
+        # Run the fit
+        clust.fit(data)
 
-        #visualizer = cluster_visualizer_multidim()
-        #visualizer.append_clusters(clusters, sample)
-        #visualizer.append_cluster(noise, sample, marker='x')
-        #visualizer.show()
+        space = np.arange(len(data))
+        reachability = clust.reachability_[clust.ordering_]
+        labels = clust.labels_[clust.ordering_]
 
-        ordering = optics_instance.get_ordering()
-        analyser = ordering_analyser(ordering)
+        plt.figure(figsize=(10, 7))
+        G = gridspec.GridSpec(2, 3)
+        ax1 = plt.subplot(G[0, :])
+        if(clustering_visualization):
+                ax2 = plt.subplot(G[1, 0])
 
-        print(analyser.extract_cluster_amount(eps))
+        if(reachability_plot):
+                # Reachability plot
+                color = ['g.', 'r.', 'b.', 'y.', 'c.']
+                for k, c in zip(range(0, 5), color):
+                        Xk = space[labels == k]
+                        Rk = reachability[labels == k]
+                        ax1.plot(Xk, Rk, c, alpha=0.3)
+                ax1.plot(space[labels == -1], reachability[labels == -1], 'k.', alpha=0.3)
+                ax1.plot(space, np.full_like(space, 0.75, dtype=float), 'k-', alpha=0.5)
+                ax1.plot(space, np.full_like(space, 0.25, dtype=float), 'k-.', alpha=0.5)
+                ax1.set_ylabel('Reachability (epsilon distance)')
+                ax1.set_title('Reachability Plot')
+        
+        if(clustering_visualization):
+                x = np.array(data)
+                # OPTICS
+                color = ['g.', 'r.', 'b.', 'y.', 'c.']
+                for k, c in zip(range(0, 5), color):
+                        Xk = x[clust.labels_ == k]
+                        ax2.plot(Xk[:, 0], Xk[:, 1], c, alpha=0.3)
+                ax2.plot(x[clust.labels_ == -1, 0], x[clust.labels_ == -1, 1], 'k+', alpha=0.1)
+                ax2.set_title('Automatic Clustering\nOPTICS')
+        
+        plt.tight_layout()
+        plt.show()
 
-        ordering_visualizer.show_ordering_diagram(analyser, amount_clusters)
-
-        objects = optics_instance.get_optics_objects()
-
-        return clusters, noise
-if __name__ == "__main__":
-    df = pd.read_csv("Datasets/dataset_diabetes/diabetic_data.csv", usecols=[6, 9, 16])
-
-    admissions = np.asarray(df["admission_type_id"])
-    emergencies = np.asarray(df["number_emergency"])
-    time_hospital = np.asarray(df["time_in_hospital"])
-
-    plt.scatter(admissions, emergencies)
-    #plt.show()
-
-    plt.scatter(time_hospital, emergencies)
-    #plt.show()
-
-    template_clustering(list(time_hospital), 5, 4)
+        return clust
