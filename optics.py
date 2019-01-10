@@ -23,9 +23,11 @@ def template_clustering(sample, eps, minpts, amount_clusters=None, visualize=Tru
         ordering = optics_instance.get_ordering()
         analyser = ordering_analyser(ordering)
 
+        print(analyser.extract_cluster_amount(eps))
+
         ordering_visualizer.show_ordering_diagram(analyser, amount_clusters)
 
-        objetcs = optics_instance.get_optics_objects()
+        objects = optics_instance.get_optics_objects()
 
         return clusters, noise
 if __name__ == "__main__":

@@ -75,8 +75,6 @@ def vectorizeDocs(docs):
     return vectors
 
 
-
-
 if __name__ == "__main__":
     vocab_path = "Datasets/kos/vocab.kos.txt"
     doc_path = "Datasets/kos/docword.kos.txt"
