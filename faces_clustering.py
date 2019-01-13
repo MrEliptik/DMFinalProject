@@ -7,7 +7,8 @@ from sklearn.cluster import DBSCAN
 import cv2
 from imutils import build_montages
 
-encodings_path = "face-clustering/encodings.pickle"
+encodings_path = "footballers_encodings.pickle"
+#encodings_path = "celebrity_encodings.pickle"
 
 # load the serialized face encodings + bounding box locations from
 # disk, then extract the set of encodings to so we can cluster on
@@ -17,7 +18,17 @@ data = pickle.loads(open(encodings_path, "rb").read())
 data = np.array(data)
 encodings = [d["encoding"] for d in data]
 
-clust = optics.cluster(encodings, min_samples=10 ,reachability_plot=True, clustering_visualization=False)
+best = 0
+best_idx = 0
+for i in range(2, 15):
+	clust = optics.cluster(encodings, min_samples=i ,reachability_plot=False, clustering_visualization=False)
+	labelIDs = np.unique(clust.labels_)
+	numUniqueFaces = len(np.where(labelIDs > -1)[0])
+	if numUniqueFaces > best:
+		best = numUniqueFaces
+		best_idx = i
+
+clust = optics.cluster(encodings, min_samples=best ,reachability_plot=True, clustering_visualization=False)
 
 # determine the total number of unique faces found in the dataset
 labelIDs = np.unique(clust.labels_)
@@ -40,7 +51,7 @@ for labelID in labelIDs:
 	# loop over the sampled indexes
 	for i in idxs:
 		# load the input image and extract the face ROI
-		image = cv2.imread("face-clustering/" + data[i]["imagePath"])
+		image = cv2.imread(data[i]["imagePath"])
 		(top, right, bottom, left) = data[i]["loc"]
 		face = image[top:bottom, left:right]
 
