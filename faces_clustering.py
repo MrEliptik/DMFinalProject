@@ -17,7 +17,7 @@ data = pickle.loads(open(encodings_path, "rb").read())
 data = np.array(data)
 encodings = [d["encoding"] for d in data]
 
-clust = optics.cluster(encodings, min_samples=5, eps=0.5,reachability_plot=True, clustering_visualization=False)
+clust = optics.cluster(encodings, min_samples=10 ,reachability_plot=True, clustering_visualization=False)
 
 # determine the total number of unique faces found in the dataset
 labelIDs = np.unique(clust.labels_)
