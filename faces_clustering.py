@@ -1,10 +1,8 @@
 import optics
 import pickle
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
-from sklearn.cluster import DBSCAN
 import cv2
+import numpy as np
+
 from imutils import build_montages
 
 if __name__ == "__main__":
