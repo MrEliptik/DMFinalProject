@@ -6,8 +6,8 @@ import numpy as np
 from imutils import build_montages
 
 if __name__ == "__main__":
-	encodings_path = "footballers_encodings.pickle"
-	#encodings_path = "celebrity_encodings.pickle"
+	encodings_path = "Ressources/footballers_encodings.pickle"
+	#encodings_path = "Ressources/celebrity_encodings.pickle"
 
 	# load the serialized face encodings + bounding box locations from
 	# disk, then extract the set of encodings to so we can cluster on them
@@ -31,14 +31,14 @@ if __name__ == "__main__":
 	# determine the total number of unique faces found in the dataset
 	labelIDs = np.unique(clust.labels_)
 	numUniqueFaces = len(np.where(labelIDs > -1)[0])
-	print("[INFO] # unique faces: {}".format(numUniqueFaces))
+	print(">> # unique faces: {}".format(numUniqueFaces))
 
 	# loop over the unique face integers
 	for labelID in labelIDs:
 		# find all indexes into the `data` array that belong to the
 		# current label ID, then randomly sample a maximum of 25 indexes
 		# from the set
-		print("[INFO] faces for face ID: {}".format(labelID))
+		print("[>> Faces for face ID: {}".format(labelID))
 		idxs = np.where(clust.labels_ == labelID)[0]
 		idxs = np.random.choice(idxs, size=min(25, len(idxs)),
 			replace=False)

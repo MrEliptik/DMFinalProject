@@ -37,7 +37,7 @@ if __name__ == "__main__":
         # find all indexes into the `data` array that belong to the
         # current label ID, then randomly sample a maximum of 25 indexes
         # from the set
-        print(">> faces for cluster ID: {}".format(labelID))
+        print(">> Faces for cluster ID: {}".format(labelID))
         idxs = np.where(clust.labels_ == labelID)[0]
         idxs = np.random.choice(idxs, size=min(25, len(idxs)),
         replace=False)
