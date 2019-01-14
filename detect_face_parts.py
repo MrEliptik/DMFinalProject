@@ -60,6 +60,5 @@ def getFacialFeatures(img, visualize=False):
 			cv2.imshow("Image", output)
 			cv2.waitKey(0)
 
-	
 
 	return face_utils.FACIAL_LANDMARKS_IDXS, shape
