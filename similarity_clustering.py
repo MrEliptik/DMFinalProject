@@ -1,18 +1,20 @@
 import detect_face_parts
 import cv2
 from scipy.spatial import distance
+import os
+from imutils import paths
 
-def extractJawFeatures(features, shape):
+def extractJawFeatures(shape):
     # Get the jaw features
-    (i, j) 			= features["jaw"]
     jaw_left 		= shape[17 - 1]
     jaw_right 		= shape[1 - 1]
     jaw_bottom 		= shape[9 - 1]
     jaw_width 		= distance.euclidean(jaw_left, jaw_right)
 
-def extractNoseFeatures(features, shape, normalizer):
+    return jaw_width
+
+def extractNoseFeatures(shape, normalizer):
     # Get the nose features
-    (i, j) 			= features["nose"]
     nose_top 		= shape[28 - 1]
     nose_left 		= shape[36 - 1]
     nose_right 		= shape[32 - 1]
@@ -22,7 +24,9 @@ def extractNoseFeatures(features, shape, normalizer):
     nose_ratio 		= nose_height / nose_width
     nose_size 		= nose_height / normalizer
 
-def extractEyeFeatures(features, shape, normalizer):
+    return nose_ratio, nose_size
+
+def extractEyeFeatures(shape, normalizer):
     # Get the eye features
     (i, j) 				= features["left_eye"]
     left_eye_top 		= shape[45 - 1]
@@ -49,9 +53,13 @@ def extractEyeFeatures(features, shape, normalizer):
     eye_size			= ((right_eye_size + left_eye_size) / 2) / normalizer
     eye_distance		= ((right_eye_distance + left_eye_distance) / 2) / normalizer
 
-def extractEyebrowFeatures(features, shape, ,normalizer):
+    return eye_size, eye_distance, [right_eye_top, left_eye_top]
+
+def extractEyebrowFeatures(shape, eyeFeatures, normalizer):
+    right_eye_top   = eyeFeatures[0]
+    left_eye_top    = eyeFeatures[1]
+
     # Get the eyebrow features
-    (i, j) 					= features["left_eyebrow"]
     left_eyebrow_top 		= shape[25 - 1]
     left_eyebrow_left 		= shape[27 - 1]
     left_eyebrow_right 		= shape[23 - 1]
@@ -70,7 +78,36 @@ def extractEyebrowFeatures(features, shape, ,normalizer):
     eyebrow_lift			= ((distance.euclidean(right_eyebrow_top, right_eye_top) + 
                                 distance.euclidean(left_eyebrow_top, left_eye_top)) / 2) / normalizer
 
+    return eyebrow_width, eyebrow_lift
 
-im = cv2.imread("Datasets/GUFD/0.jpg")
 
-features, shape = detect_face_parts.getFacialFeatures(im)
+dataset_path = "Datasets/GUFD/"
+
+imagePaths = list(paths.list_images(dataset_path))
+
+features_dataset = []
+
+for (i, imagePath) in enumerate(imagePaths):
+    print(">> Processing image {}/{}".format(i + 1, len(imagePaths)))
+    print(" " + imagePath)
+    im = cv2.imread(imagePath)
+
+    # Extract the facial feature
+    print(" " + "Extracting features..")
+    features, shape                     = detect_face_parts.getFacialFeatures(im)
+    jaw_width                           = extractJawFeatures(shape)
+    nose_ratio, nose_size               = extractNoseFeatures(shape, jaw_width)
+    eye_size, eye_distance, eyeFeatures = extractEyeFeatures(shape, jaw_width)
+    eyebrow_width, eyebrow_lift         = extractEyebrowFeatures(shape, eyeFeatures, jaw_width)
+
+    features_dataset.append([jaw_width, nose_ratio, nose_size, eye_size, eye_distance, eyebrow_width, eyebrow_lift])
+
+'''
+jaw_width       /,
+eye_distance,   /
+nose_ratio,     /
+nose_size,      /
+eye_size,       /
+eyebrow_width,  /
+eyebrow_lift    /
+'''

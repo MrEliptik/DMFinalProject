@@ -8,13 +8,12 @@ import argparse
 import imutils
 import dlib
 import cv2
-from scipy.spatial import distance
 
 def getFacialFeatures(img, visualize=False):
 	# initialize dlib's face detector (HOG-based) and then create
 	# the facial landmark predictor
 	detector = dlib.get_frontal_face_detector()
-	predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+	predictor = dlib.shape_predictor("Ressources/shape_predictor_68_face_landmarks.dat")
 
 	# load the input image, resize it, and convert it to grayscale
 	image = img
@@ -59,6 +58,5 @@ def getFacialFeatures(img, visualize=False):
 			output = face_utils.visualize_facial_landmarks(image, shape)
 			cv2.imshow("Image", output)
 			cv2.waitKey(0)
-
 
 	return face_utils.FACIAL_LANDMARKS_IDXS, shape
