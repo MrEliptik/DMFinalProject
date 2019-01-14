@@ -1,4 +1,3 @@
-import detect_face_parts
 import cv2
 import os
 import pickle
@@ -139,37 +138,37 @@ def extractEyebrowFeatures(shape, eyeFeatures, normalizer):
 
     return eyebrow_width, eyebrow_lift
 
+if __name__ == "__main__":  
+    dataset_path    = "Datasets/GUFD/"
+    encodings_path  = "Ressources/GUFD_encodings.pickle"
 
-dataset_path    = "Datasets/GUFD/"
-encodings_path  = "Ressrouces/GUFD_encodings.pickle"
+    imagePaths = list(paths.list_images(dataset_path))
 
-imagePaths = list(paths.list_images(dataset_path))
+    features_dataset = []
 
-features_dataset = []
+    for (i, imagePath) in enumerate(imagePaths):
+        print(">> Processing image {}/{}".format(i + 1, len(imagePaths)))
+        print(" " + imagePath)
+        im = cv2.imread(imagePath)
 
-for (i, imagePath) in enumerate(imagePaths):
-    print(">> Processing image {}/{}".format(i + 1, len(imagePaths)))
-    print(" " + imagePath)
-    im = cv2.imread(imagePath)
+        # Extract the facial feature
+        print(" " + "Extracting features..")
+        features, shape                     = getFacialFeatures(im)
+        jaw_width                           = extractJawFeatures(shape)
+        nose_ratio, nose_size               = extractNoseFeatures(shape, jaw_width)
+        eye_size, eye_distance, eyeFeatures = extractEyeFeatures(shape, jaw_width)
+        eyebrow_width, eyebrow_lift         = extractEyebrowFeatures(shape, eyeFeatures, jaw_width)
 
-    # Extract the facial feature
-    print(" " + "Extracting features..")
-    features, shape                     = detect_face_parts.getFacialFeatures(im)
-    jaw_width                           = extractJawFeatures(shape)
-    nose_ratio, nose_size               = extractNoseFeatures(shape, jaw_width)
-    eye_size, eye_distance, eyeFeatures = extractEyeFeatures(shape, jaw_width)
-    eyebrow_width, eyebrow_lift         = extractEyebrowFeatures(shape, eyeFeatures, jaw_width)
+        # build a dictionary of the image path, bounding box location,
+        # and facial encodings for the current image
+        d = [{
+                "imagePath": imagePath, 
+                "encoding": [jaw_width, nose_ratio, nose_size, eye_size, eye_distance, eyebrow_width, eyebrow_lift]
+            }]
+        features_dataset.extend(d)
 
-    # build a dictionary of the image path, bounding box location,
-	# and facial encodings for the current image
-    d = [{
-            "imagePath": imagePath, 
-            "encoding": [jaw_width, nose_ratio, nose_size, eye_size, eye_distance, eyebrow_width, eyebrow_lift]
-        }]
-    features_dataset.extend(d)
-
-# dump the facial encodings data to disk
-print(">> Serializing encodings...")
-f = open(encodings_path, "wb")
-f.write(pickle.dumps(features_dataset))
-f.close()
+    # dump the facial encodings data to disk
+    print(">> Serializing encodings...")
+    f = open(encodings_path, "wb")
+    f.write(pickle.dumps(features_dataset))
+    f.close()
