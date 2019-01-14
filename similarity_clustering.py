@@ -13,6 +13,13 @@ if __name__ == "__main__":
     data = np.array(data)
     encodings = [d["encoding"] for d in data]
 
+    max_val = max(encodings)[0]
+
+    '''
+    for encoding in encodings:
+        encoding[0] = encoding[0] / max_val
+    '''
+
     best = 0
     best_idx = 0
     for i in range(2, 15):
