@@ -18,14 +18,15 @@ if __name__ == "__main__":
 	best = 0
 	best_idx = 0
 	for i in range(2, 15):
-		clust = optics.cluster(encodings, min_samples=i ,reachability_plot=False, clustering_visualization=False)
+		clust = optics.cluster(encodings, min_samples=i, reachability_plot=False, clustering_visualization=False)
 		labelIDs = np.unique(clust.labels_)
 		numUniqueFaces = len(np.where(labelIDs > -1)[0])
 		if numUniqueFaces > best:
 			best = numUniqueFaces
 			best_idx = i
 
-	clust = optics.cluster(encodings, min_samples=best ,reachability_plot=True, clustering_visualization=False)
+	print(">> Clustering using min_samples=" + str(best))
+	clust = optics.cluster(encodings, min_samples=10, reachability_plot=True, clustering_visualization=False)
 
 	# determine the total number of unique faces found in the dataset
 	labelIDs = np.unique(clust.labels_)

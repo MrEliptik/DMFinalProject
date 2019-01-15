@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from sklearn.cluster import OPTICS
 
-def cluster(data, min_samples=5, eps=np.inf ,reachability_plot=True, clustering_visualization=False, n_jobs=1):
-        clust = OPTICS(min_cluster_size=min_samples, max_eps=eps, n_jobs=n_jobs)
+def cluster(data, min_samples=5, eps=np.inf ,reachability_plot=True, maxima_ratio=0.75, clustering_visualization=False, n_jobs=1):
+        clust = OPTICS(min_cluster_size=min_samples, max_eps=eps, maxima_ratio=maxima_ratio, n_jobs=n_jobs)
 
         # Run the fit
         clust.fit(data)
