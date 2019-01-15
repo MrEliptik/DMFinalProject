@@ -26,7 +26,7 @@ if __name__ == "__main__":
 			best_idx = i
 
 	print(">> Clustering using min_samples=" + str(best))
-	clust = optics.cluster(encodings, min_samples=10, reachability_plot=True, clustering_visualization=False)
+	clust = optics.cluster(encodings, min_samples=best, reachability_plot=True, clustering_visualization=False)
 
 	# determine the total number of unique faces found in the dataset
 	labelIDs = np.unique(clust.labels_)
