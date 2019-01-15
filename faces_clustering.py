@@ -7,7 +7,6 @@ from imutils import build_montages
 
 if __name__ == "__main__":
 	encodings_path = "Ressources/footballers_encodings.pickle"
-	#encodings_path = "Ressources/celebrity_encodings.pickle"
 
 	# load the serialized face encodings + bounding box locations from
 	# disk, then extract the set of encodings to so we can cluster on them
