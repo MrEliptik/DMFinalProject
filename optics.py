@@ -46,3 +46,6 @@ def cluster(data, min_samples=5, eps=np.inf ,reachability_plot=True, maxima_rati
                 plt.show()
               
         return clust
+
+def predict(clust, data):
+        return clust.fit_predict(data)

@@ -8,6 +8,10 @@ import os
 dataset_path 	= "Datasets/footballers/"
 encodings_path 	= "Ressources/footballers_encodings.pickle"
 
+# For predictions
+#dataset_path 	= "Datasets/footballers/Predict/"
+#encodings_path 	= "Ressources/footballers_predict_encodings.pickle"
+
 # grab the paths to the input images in our dataset, then initialize
 # out data list (which we'll soon populate)
 print(">> Quantifying faces...")
