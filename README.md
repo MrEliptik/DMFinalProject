@@ -39,14 +39,14 @@ Install all the rest of the requirements with:
 
     - shape_predictor_68_face_landmarks.dat : Used to extract facial features in *encode_features.py*
 
-- encode_faces.py           : used to encode the face in an image as a 128-d vector
-- encode_features.py        : used to encode the facial features of a face as a 7-d vector
-- faces_clustering.py       : used to cluster the footballers' faces
-- diabetic_clustering.py    : used to cluster the diabetic's data
-- similarity_clustering.py  : used to cluster the GUFD dataset based on facial features similiarities
-- optics.py                 : contains the clustering and predicting methods
+- *encode_faces.py*           : used to encode the face in an image as a 128-d vector
+- *encode_features.py*       : used to encode the facial features of a face as a 7-d vector
+- *faces_clustering.py*       : used to cluster the footballers' faces
+- *diabetic_clustering.py*    : used to cluster the diabetic's data
+- *similarity_clustering.py*  : used to cluster the GUFD dataset based on facial features similiarities
+- *optics.py*                 : contains the clustering and predicting methods
 
-- requirements.txt          : file containing all the python packages requirements
+- *requirements.txt*          : file containing all the python packages requirements
 
 ## Authors
 
