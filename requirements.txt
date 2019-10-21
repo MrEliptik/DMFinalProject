@@ -16,7 +16,7 @@ inflect==2.1.0
 jmespath==0.9.3
 kiwisolver==1.0.1
 matplotlib==3.0.2
-nltk==3.4
+nltk==3.4.5
 numpy==1.15.4
 opencv-python==4.0.0.21
 pandas==0.23.4
